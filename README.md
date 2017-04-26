@@ -2,11 +2,11 @@
 Team Builder by team Moonshot for CIS 422: Software Engineering at the University of Oregon
 
 #### Team Members
-Jared Smith
-Tyler Quatraro
-Yuan Wang
+* Jared Smith
+* Tyler Quatraro
+* Yuan Wang
 
-## OSX Setup
+### OSX Setup
 Install Homebrew (if needed):
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
