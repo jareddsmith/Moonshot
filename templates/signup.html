@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Sign-Up: Account Information</title>
+  <meta name="description" content="Sign-Up Page">
+  <meta name="author" content="Jared Smith">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="static/css/normalize.css">
+  <link rel="stylesheet" href="static/css/skeleton.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+    
+<!-- Flashed messages before content -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashesList">
+    {% for message in messages %}
+      <li class=flashes>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class ="signupBackground">
+  <div class="container">
+  <div class="row">
+    <div class="column" style="margin-top: 15%">
+      <h3>Please enter your information.</h3>
+      <hr>
+      <form method="POST" action="_signup" style="margin: 5% 5% 5% 5%;">
+        <div class="signup column">
+            <label for="RegisterFirstNameInput">First Name</label>
+            <input class="u-full-width" type="text" placeholder="First Name" id="RegisterFirstNameInput" name="RegisterFirstNameInput">
+                  
+            <label for="RegisterLastNameInput">Last Name</label>
+            <input class="u-full-width" type="text" placeholder="Last Name" id="RegisterLastNameInput" name="RegisterLastNameInput">
+                          
+            <label for="RegisterIDInput">Student ID</label>
+            <input class="u-full-width" type="text" placeholder="951234567" id="RegisterIDInput" name="RegisterIDInput">
+        </div>
+        <div class="signup column">
+            <label for="LoginEmailInput">Your e-mail</label>
+            <input class="u-full-width" type="email" placeholder="duckid@uoregon.edu" id="RegisterEmailInput" name="RegisterEmailInput">
+                
+            <label for="RegisterPasswordInput">Your password</label>
+            <input class="u-full-width" type="password" placeholder="Password" id="RegisterPasswordInput" name="RegisterPasswordInput">
+                
+            <label for="LoginRepeatInput">Confirm password</label>
+            <input class="u-full-width" type="password" placeholder="Confirm password" id="LoginRepeatInput" name="LoginRepeatInput">
+                
+            <input type="button" id="half-left" onclick="document.location='/'" value="Back"/>
+            <input class="button-primary" id="half-right" type="submit" value="Next">
+        </div>
+      </form>
+   </div>
+</div>
+</div>
+</div>
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Update Info</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="static/css/normalize.css">
+  <link rel="stylesheet" href="static/css/skeleton.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+<div class="container">
+
+<!-- Flashed messages before content -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<p>
+<h1>Manage Accounts</h1>
+</p>
+
+{% if session.accounts %}
+    {% for account in session.accounts %}
+  <form method="GET" action="_delete">
+    <table class="u-full-width">
+      <thead>
+        <tr>
+          <th>Date Created</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Mail</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ account.date }}</td>
+          <td>{{ account.first }}</td>
+          <td>{{ account.last }}</td>
+          <td>{{ account.email }}</td>
+          <td><input type="hidden" name="accountID" value="{{account._id}}"/><input type="submit" value="Delete?"/></td>
+        <tr>
+      </tbody>
+    </table>
+  </form>
+  <hr>
+  {% endfor %}
+{% else %}
+  <p>No accounts available.</p>  
+{% endif %}
+    </div> <!-- container -->
+  </body>
+</html>
+
