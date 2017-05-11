@@ -48,15 +48,15 @@
           <div class="five column" style="margin-top: 20%">
               <h3>Login</h3>
               <hr>
-                <form action="_login" method="POST" style="margin: 5% 5% 15% 5%;">
+                <form action="_login" method="POST" style="margin: 5% 5% auto 5%;">
                     <label for="LoginEmailInput" id="form_label">Your e-mail</label>
                     <input class="u-full-width" type="email" placeholder="duckid@uoregon.edu" id="LoginEmailInput" name="LoginEmailInput">
                 
                     <label for="LoginPasswordInput" id="form_label">Your password</label>
                     <input class="u-full-width" type="password" placeholder="password" id="LoginPasswordInput" name="LoginPasswordInput">
                         
-                    <input type="button" id="back" onclick="document.location='/'" value="Back"/>
-                    <button class="button" id="login">Login</button>
+                    <input type="button" style="margin-top: 0%" id="half-left" onclick="document.location='/'" value="Back"/>
+                    <button class="button-primary" style="margin-top: 0%" id="half-right">Login</button>
                 </form>
           </div>
       </div>

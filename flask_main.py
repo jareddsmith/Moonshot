@@ -32,7 +32,7 @@ print("Entering Setup")
 
 try:
 	dbclient = MongoClient(CONFIG.MONGO_URL)
-	db = dbclient.clubmanager
+	db = dbclient.classdata
 	collection = db.accounts
 except:
 	print("Failure to open database. Is the Mongo server running? Correct Password?")
@@ -60,7 +60,7 @@ def signup():
 
 @app.route("/avail")
 def avail():
-	app.logger.debug("Account Creation page entry")
+	app.logger.debug("Availability page entry")
 	return render_template('avail.html')
 	
 @app.route("/login")
@@ -78,27 +78,26 @@ def landing():
 	flask.session['first'] = account['first']
 	flask.session['last'] = account['last']
 	flask.session['email'] = account['email']
-	flask.session['phone'] = account['phone']
 	flask.session['avail'] = account['avail']
-	flask.session['students'] = get_students()
+	flask.session['students'] = get_accounts()
 	
-	return flask.render_template('main.html')
+	return render_template('main.html')
 	
 @app.route("/user")
 def user():
 	app.logger.debug("Update account page entry")
 	app.logger.debug("Getting account now")
-	return flask.render_template('usermenu.html')
+	return render_template('usermenu.html')
 	
 @app.route("/manage")
 def manage():
 	app.logger.debug("Manage page entry")
-	return flask.render_template('manage.html')
+	return render_template('manage.html')
 
 @app.errorhandler(404)
 def page_not_found(error):
 	app.logger.debug("Page not found")
-	return flask.render_template('page_not_found.html', badurl=request.base_url, linkback=url_for("index")), 404
+	return render_template('page_not_found.html', badurl=request.base_url, linkback=url_for("index")), 404
 
 ####################
 #
@@ -136,35 +135,23 @@ def create_account():
 	print("Getting account information...")
 	first = request.form.get('RegisterFirstNameInput', '', type=str)
 	last = request.form.get('RegisterLastNameInput', '', type=str)
-	email = request.form.get('RegisterEmailInput', '', type=str)
-	phone = request.form.get('RegisterPhoneInput', '', type=str)
 	s_id = request.form.get('RegisterIDInput', '', type=str)
-	status = request.form.get('RegisterStatusInput', '', type=str)
-	referral = request.form.get('RegisterReferInput', '', type=str)
+	email = request.form.get('RegisterEmailInput', '', type=str)
 	pwd = request.form.get('RegisterPasswordInput', '', type=str)
 	confirm = request.form.get('LoginRepeatInput', '', type=str)
-	sum_name = request.form.get('RegisterSumNameInput', '', type=str)
-	
-	if pwd != confirm:
-		flask.flash("Please confirm your password.")
-		return flask.redirect("/sign_up")
 	
 	#Clears any excess whitespace
 	first.strip()
 	last.strip()
-	email.strip()
-	phone.strip()
 	s_id.strip()
-	sum_name.strip()
+	email.strip()
 	
-	test = insert_account(first, last, email, phone, s_id, status, pwd, sum_name, referral)
+	print("Testing account information...")
+	test = insert_new(first, last, s_id, email, pwd, confirm)
 	if test == "error":
-		return flask.redirect("/sign_up")
-			
-	if test == "registered":
-		return flask.redirect("/login")
+		return redirect("/signup")
 	
-	return flask.redirect("/login")
+	return redirect("/login")
 
 @app.route("/_delete")
 def delete_account():
@@ -181,12 +168,12 @@ def delete_account():
 	collection.remove(account)
 	print("Deleted! Redirecting to **TBD**.")
 
-	return flask.redirect("/**TBD**")
+	return redirect("/**TBD**")
 	
 @app.route("/_login", methods=["POST"])
 def login_user():
 	"""
-	Login user
+	Logs user in
 	"""
 	input_email = request.form.get('LoginEmailInput')
 	input_pwd = request.form.get('LoginPasswordInput')
@@ -195,18 +182,32 @@ def login_user():
 	print(account)
 	if account is None:
 		flask.flash("Account not found!")
-		return flask.redirect("/login")
+		return redirect("/login")
 	
-	pwd = base64.b64decode(account["pwd"])
-	
+	pwd = base64.b64decode(account["pwd"]).decode("utf-8")
+
 	if input_pwd == pwd:
 		flask.session['user'] =  str(account['_id'])
-		return flask.redirect("/dashboard")
-	
-	flask.flash("Invalid credentials.")
+		
+		if account["avail"] == "":
+			return redirect("/avail")
+		
+		return redirect("/dashboard")
+	else:
+		flask.flash("Invalid credentials.")
+
 	if not input_pwd:
 		flask.flash("No password entered.")
-	return flask.redirect("/login")
+	
+	return redirect("/login")
+
+@app.route("/_avail", methods=["POST"])
+def init_avail():
+	"""
+	Updates new accounts with account availability and experience
+	"""
+
+	return
 	
 @app.route("/_update", methods=["POST"])
 def update_user():
@@ -249,7 +250,7 @@ def update_user():
 		
 	collection.update({"_id": ObjectId(accountID)},{'$set':{'avail':avail,'first':first,'last':last,'major':major,'email':email,'phone':phone,'quote':quote}})
 	flask.flash("Your user information has been updated!")
-	return flask.redirect("/dashboard")
+	return redirect("/dashboard")
 	
 	
 ######################
@@ -257,8 +258,6 @@ def update_user():
 # SUPPORTING FUNCTIONS
 #
 ######################
-
-
 
 def get_accounts():
 	"""
@@ -275,6 +274,86 @@ def get_accounts():
 
 	accounts.sort(key=lambda a: a["date"])
 	return accounts
+
+def error_test(first, last, s_id, email, pwd, confirm):
+	"""
+	Tests the information given for input errors
+	"""
+	error = False
+	
+	if not first:
+		flask.flash("No first name given.")
+		error = True
+	
+	if not last:
+		flask.flash("No last name given.")
+		error = True
+
+	if s_id.startswith("95") == False:
+		flask.flash("ID must begin with 95.")
+		error = True
+
+	if len(s_id) != 9:
+		flask.flash("ID must be 9 digits.")
+		error = True
+
+	if not email:
+		flask.flash("No email given.")
+		error = True
+
+	if not pwd:
+		flask.flash("No password given.")
+		error = True
+
+	if pwd != confirm:
+		flask.flash("The passwords you entered did not match.")
+		error = True
+
+	return error
+
+def insert_new(first, last, s_id, email, pwd, confirm):
+	"""
+	Inserts an new account into the database with minimum user info
+	"""
+	date = arrow.utcnow().format('MM/DD/YYYY')
+	dt = arrow.get(date, 'MM/DD/YYYY').replace(tzinfo='local')
+	iso_dt = dt.isoformat()
+	
+	if error_test(first, last, s_id, email, pwd, confirm):
+		return "error"
+	
+	#Input checking
+	account = collection.find_one({"email": email})
+	if account is not None:
+		flask.flash("Account already created!")
+		return "registered"
+	else:
+		flask.flash("Account created! You may now login.")
+
+	print("Encrypting password")
+	pwd = base64.b64encode(pwd.encode('utf-8'))
+	
+	print("Compiling new account from data")
+	account = {
+		"type" :  "account",
+			"role" : "user",
+			"date" : iso_dt,
+			"first"	: first,
+			"last" : last,
+			"s_id" : s_id,
+			"email" : email,
+			"pwd" : pwd,
+			"lang" : "",
+			"exp" : "",
+			"str" : "",
+			"wk" : "",
+			"avail" : ""
+	}
+
+	collection.insert(account)
+	print("Account has been inserted into the database.")
+	
+	return "Success"
 
 def insert_account(first, last, email, phone, s_id, status, pwd, sum_name, referral):
 	"""
@@ -313,7 +392,7 @@ def insert_account(first, last, email, phone, s_id, status, pwd, sum_name, refer
 		flask.flash("Account created! You may now login.")
 	
 	print("Encrypting password")
-	pwd = base64.b64encode(pwd.encode('ascii'))
+	pwd = base64.b64encode(pwd.encode('utf-8'))
 	
 	print("Compiling account from data")
 	account = {

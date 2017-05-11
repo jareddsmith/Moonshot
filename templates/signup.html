@@ -28,27 +28,25 @@
 
 </head>
 <body>
-    
-<!-- Flashed messages before content -->
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class="flashesList">
-    {% for message in messages %}
-      <li class=flashes>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class ="signupBackground">
   <div class="container">
+  <!-- Flashed messages before content -->
+	  {% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<ul class="flashesList">
+			{% for message in messages %}
+				<li class=flashes>{{ message }}</li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	  {% endwith %}
   <div class="row">
-    <div class="column" style="margin-top: 15%">
+    <div class="column" style="margin-left: auto; margin-right: auto; margin-top: 15%">
       <h3>Please enter your information.</h3>
       <hr>
-      <form method="POST" action="_signup" style="margin: 5% 5% 5% 5%;">
+      <form method="POST" action="_signup" style="margin: 5% 5% auto 5%">
         <div class="signup column">
             <label for="RegisterFirstNameInput">First Name</label>
             <input class="u-full-width" type="text" placeholder="First Name" id="RegisterFirstNameInput" name="RegisterFirstNameInput">
@@ -70,7 +68,7 @@
             <input class="u-full-width" type="password" placeholder="Confirm password" id="LoginRepeatInput" name="LoginRepeatInput">
                 
             <input type="button" id="half-left" onclick="document.location='/'" value="Back"/>
-            <input class="button-primary" id="half-right" type="submit" value="Next">
+            <input class="button-primary" id="half-right" type="submit" value="Sign Up">
         </div>
       </form>
    </div>
