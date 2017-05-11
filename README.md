@@ -19,14 +19,18 @@ brew flask
 brew pymongo
 ```
 
-Start and activate the Virtual Environment and install the modules into the environment:
+Start and activate the Virtual Environment:
+```
+pyvenv env
+. env/bin/activate
+```
+
+Install the necessary modules into the environment:
 ```
 make install
 ```
 
-Install the necessary modules (if needed):
+Uninstall the program from the system
 ```
-pyvenv env
-. env/bin/activate
-make install
+make clean
 ```
