@@ -6,7 +6,7 @@ Team Builder by team Moonshot for CIS 422: Software Engineering at the Universit
 * Tyler Quatraro
 * Yuan Wang
 
-## OSX Setup
+## Setup
 Install Homebrew (if needed):
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
