@@ -23,5 +23,4 @@ clean:
 
 veryclean:
 	make clean
-	rm -rf env
 	rm -rf CONFIG.py
