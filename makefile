@@ -1,13 +1,27 @@
-install:
-	pip install arrow
-	pip install flask
-	pip install pymongo
+env:
+	$(PYVENV)  env
+	($(INVENV) pip install -r requirements.txt )
 
-tidy:
-	rm -rf env
-	rm -rf __pycache__
+# Many recipes need to be run in the virtual environment, 
+# so run them as $(INVENV) command
+INVENV = . env/bin/activate ;
+
+install:
+        make env
+        make run
+
+run:	env
+	($(INVENV) python3 flask_main.py) ||  true
+
+test:	env
+	$(INVENV) nosetests
 
 clean:
+	rm -rf env
+	rm -rf *.pyc
 	rm -rf __pycache__
+
+veryclean:
+	make clean
 	rm -rf env
 	rm -rf CONFIG.py

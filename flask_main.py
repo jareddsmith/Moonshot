@@ -1,4 +1,6 @@
 import flask
+
+from flask import flash
 from flask import render_template
 from flask import request
 from flask import redirect
@@ -126,6 +128,44 @@ def humanize_arrow_date(date):
 		human = date
 	return human
 
+@app.route("/_avail", methods=["POST"])
+def init_avail():
+	"""
+	Updates new accounts with account availability and experience
+	"""
+	
+	first = flask.session['first']
+	last = flask.session['last']
+	s_id = flask.session['id']
+	email = flask.session['email']
+	pwd = flask.session['pwd']
+	
+	#Clears flask variables
+	flask.session['first'] = None
+	flask.session['last'] = None
+	flask.session['id'] = None
+	flask.session['email'] = None
+	flask.session['pwd'] = None
+
+	#TODO: Pull data from table
+	mon_avail = request.form.get('mo', '', type=str)
+	tue_avail = request.form.get('tu', '', type=str)
+	wed_avail = request.form.get('we', '', type=str)
+	thu_avail = request.form.get('th', '', type=str)
+	fri_avail = request.form.get('fr', '', type=str)
+
+	print(first)
+	print(last)
+	print(s_id)
+	print(email)
+	print(mon_avail)
+	print(tue_avail)
+	print(wed_avail)
+	print(thu_avail)
+	print(fri_avail)
+	
+	return redirect("/avail")
+
 @app.route("/_signup", methods=["POST"])
 def create_account():
 	"""
@@ -147,11 +187,19 @@ def create_account():
 	email.strip()
 	
 	print("Testing account information...")
-	test = insert_new(first, last, s_id, email, pwd, confirm)
-	if test == "error":
-		return redirect("/signup")
+	if error_test(first, last, s_id, email, pwd, confirm) == True:
+		return redirect("/sign_up")
 	
-	return redirect("/login")
+	flask.session['first'] = first
+	flask.session['last'] = last
+	flask.session['id'] = s_id
+	flask.session['email'] = email
+
+	print("Encrypting password")
+	pwd = base64.b64encode(pwd.encode('utf-8'))
+	flask.session['pwd'] = pwd
+
+	return redirect("/avail")
 
 @app.route("/_delete")
 def delete_account():
@@ -181,7 +229,7 @@ def login_user():
 	account = collection.find_one({"email": input_email})
 	print(account)
 	if account is None:
-		flask.flash("Account not found!")
+		flash("Account not found!")
 		return redirect("/login")
 	
 	pwd = base64.b64decode(account["pwd"]).decode("utf-8")
@@ -194,20 +242,12 @@ def login_user():
 		
 		return redirect("/dashboard")
 	else:
-		flask.flash("Invalid credentials.")
+		flash("Invalid credentials.")
 
 	if not input_pwd:
-		flask.flash("No password entered.")
+		flash("No password entered.")
 	
 	return redirect("/login")
-
-@app.route("/_avail", methods=["POST"])
-def init_avail():
-	"""
-	Updates new accounts with account availability and experience
-	"""
-
-	return
 	
 @app.route("/_update", methods=["POST"])
 def update_user():
@@ -249,7 +289,7 @@ def update_user():
 		quote = flask.session['quote']
 		
 	collection.update({"_id": ObjectId(accountID)},{'$set':{'avail':avail,'first':first,'last':last,'major':major,'email':email,'phone':phone,'quote':quote}})
-	flask.flash("Your user information has been updated!")
+	flash("Your user information has been updated!")
 	return redirect("/dashboard")
 	
 	
@@ -275,63 +315,21 @@ def get_accounts():
 	accounts.sort(key=lambda a: a["date"])
 	return accounts
 
-def error_test(first, last, s_id, email, pwd, confirm):
-	"""
-	Tests the information given for input errors
-	"""
-	error = False
-	
-	if not first:
-		flask.flash("No first name given.")
-		error = True
-	
-	if not last:
-		flask.flash("No last name given.")
-		error = True
-
-	if s_id.startswith("95") == False:
-		flask.flash("ID must begin with 95.")
-		error = True
-
-	if len(s_id) != 9:
-		flask.flash("ID must be 9 digits.")
-		error = True
-
-	if not email:
-		flask.flash("No email given.")
-		error = True
-
-	if not pwd:
-		flask.flash("No password given.")
-		error = True
-
-	if pwd != confirm:
-		flask.flash("The passwords you entered did not match.")
-		error = True
-
-	return error
-
 def insert_new(first, last, s_id, email, pwd, confirm):
 	"""
-	Inserts an new account into the database with minimum user info
-	"""
+		Inserts an new account into the database with minimum user info
+		"""
 	date = arrow.utcnow().format('MM/DD/YYYY')
 	dt = arrow.get(date, 'MM/DD/YYYY').replace(tzinfo='local')
 	iso_dt = dt.isoformat()
 	
-	if error_test(first, last, s_id, email, pwd, confirm):
-		return "error"
-	
 	#Input checking
 	account = collection.find_one({"email": email})
 	if account is not None:
-		flask.flash("Account already created!")
+		flash("Account already created!")
 		return "registered"
 	else:
-		flask.flash("Account created! You may now login.")
-
-	print("Encrypting password")
-	pwd = base64.b64encode(pwd.encode('utf-8'))
+		flash("Account created! You may now login.")
 	
 	print("Compiling new account from data")
 	account = {
@@ -355,69 +353,41 @@ def insert_new(first, last, s_id, email, pwd, confirm):
 	
 	return "Success"
 
-def insert_account(first, last, email, phone, s_id, status, pwd, sum_name, referral):
+def error_test(first, last, s_id, email, pwd, confirm):
 	"""
-	Inserts an account into the database
+	Tests the information given for input errors
 	"""
-	date = arrow.utcnow().format('MM/DD/YYYY')
-	dt = arrow.get(date, 'MM/DD/YYYY').replace(tzinfo='local')
-	iso_dt = dt.isoformat()
-
-	print("*** Account")
-	print("***")
-	print("*** {}".format(date))
-	print("*** {} {}".format(first, last))
-	print("*** {} {}".format(phone, email))
-	print("*** {}".format(status))
-	print("*** {}".format(s_id))
+	error = False
 	
-	if not first or not last or not email or not pwd:
-		if not first:
-			flask.flash("No first name given.")
-		if not last:
-			flask.flash("No last name given.")
-		if not email:
-			flask.flash("No email given.")
-		if not pwd:
-			flask.flash("No password given.")
-		return "error"
-
-
-	#Input checking
-	account = collection.find_one({"email": email})
-	if account is not None:
-		flask.flash("Account already created!")
-		return "registered"
-	else:
-		flask.flash("Account created! You may now login.")
+	if not first:
+		flash("No first name given.")
+		error = True
 	
-	print("Encrypting password")
-	pwd = base64.b64encode(pwd.encode('utf-8'))
-	
-	print("Compiling account from data")
-	account = {
-			"type" :  "account",
-			"date" : iso_dt,
-			"first"	: first,
-			"last" : last,
-			"email" : email,
-			"phone" : phone,
-			"s_id" : s_id,
-			"status" : status,
-			"sum_name" : sum_name,
-			"pwd" : pwd,
-			"referral" : referral,
-			"role" : "user",
-			"major" : "",
-			"avail" : "",
-			"quote" : ""
-		}
-		
-	collection.insert(account)
-	print("Account has been inserted into the database.")
+	if not last:
+		flash("No last name given.")
+		error = True
 
-	return 0
-	
+	if s_id.startswith("95") == False:
+		flash("ID must begin with 95.")
+		error = True
+
+	if len(s_id) != 9:
+		flash("ID must be 9 digits.")
+		error = True
+
+	if not email:
+		flash("No email given.")
+		error = True
+
+	if not pwd:
+		flash("No password given.")
+		error = True
+
+	if pwd != confirm:
+		flash("The passwords you entered did not match.")
+		error = True
+
+	return error
 
 if __name__ == "__main__":
 	app.debug=CONFIG.DEBUG

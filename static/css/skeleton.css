@@ -28,6 +28,24 @@
 
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+.outer {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.middle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.inner {
+    margin-left: auto;
+    margin-right: auto; 
+    width: 100%;
+}
+
 .scroll {
 	background-color:transparent;
 	width: 100%;
@@ -40,9 +58,8 @@
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 20px;
   box-sizing: border-box;
-  }
+}
 
 .column,
 .columns {

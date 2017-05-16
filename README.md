@@ -1,5 +1,5 @@
 # Moonshot
-Team Builder by team Moonshot for CIS 422: Software Engineering at the University of Oregon
+Team Builder by the Moonshot student development team for CIS 422: Software Engineering at the University of Oregon
 
 #### Team Members
 * Jared Smith
@@ -19,18 +19,17 @@ brew flask
 brew pymongo
 ```
 
-Start and activate the virtual environment to run program:
-```
-pyvenv env
-. env/bin/activate
-```
-
-Install the necessary modules into the virtual environment:
+Install the virtual environment and run program:
 ```
 make install
 ```
 
+Install the necessary modules into the virtual environment:
+```
+make run
+```
+
 Uninstall the program from the system
 ```
-make clean
+make veryclean
 ```
