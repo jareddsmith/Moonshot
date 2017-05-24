@@ -12,7 +12,7 @@ install:
 	make run
 
 run:	env
-	($(INVENV) python3 flask_main.py) ||  true )
+	($(INVENV) python3 flask_main.py ||  true )
 
 test:	env
 	$(INVENV) nosetests
