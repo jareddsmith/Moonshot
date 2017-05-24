@@ -4,11 +4,12 @@ env:
 
 # Many recipes need to be run in the virtual environment, 
 # so run them as $(INVENV) command
+PYVENV = pyvenv
 INVENV = . env/bin/activate ;
 
 install:
-        make env
-        make run
+	make env
+	make run
 
 run:	env
 	($(INVENV) python3 flask_main.py) ||  true
@@ -24,3 +25,4 @@ clean:
 veryclean:
 	make clean
 	rm -rf CONFIG.py
+

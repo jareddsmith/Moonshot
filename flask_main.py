@@ -81,7 +81,7 @@ def landing():
 	flask.session['last'] = account['last']
 	flask.session['email'] = account['email']
 	flask.session['avail'] = account['avail']
-	flask.session['students'] = get_accounts()
+	flask.session['accounts'] = get_accounts()
 	
 	return render_template('main.html')
 	
@@ -187,13 +187,22 @@ def create_account():
 	email.strip()
 	
 	print("Testing account information...")
-	if error_test(first, last, s_id, email, pwd, confirm) == True:
-		return redirect("/sign_up")
-	
-	flask.session['first'] = first
-	flask.session['last'] = last
-	flask.session['id'] = s_id
-	flask.session['email'] = email
+	if signup_errors(first, last, s_id, email, pwd, confirm) == True:
+		flask.session['first'] = None
+		flask.session['last'] = None
+		flask.session['id'] = None
+		flask.session['email'] = None
+		
+		if first:
+			flask.session['first'] = first
+		if last:
+			flask.session['last'] = last
+		if s_id:
+			flask.session['id'] = s_id
+		if email:
+			flask.session['email'] = email
+		
+		return redirect("/signup")
 
 	print("Encrypting password")
 	pwd = base64.b64encode(pwd.encode('utf-8'))
@@ -353,27 +362,38 @@ def insert_new(first, last, s_id, email, pwd, confirm):
 	
 	return "Success"
 
-def error_test(first, last, s_id, email, pwd, confirm):
+def signup_errors(first, last, s_id, email, pwd, confirm):
 	"""
-	Tests the information given for input errors
+	Tests the signup information given for input errors
 	"""
 	error = False
+	flask.session['last'] = last
+	flask.session['id'] = s_id
+	flask.session['email'] = email
 	
 	if not first:
 		flash("No first name given.")
 		error = True
+	else:
+		flask.session['first'] = first
 	
 	if not last:
 		flash("No last name given.")
 		error = True
+	else:
+		flask.session['last'] = first
 
-	if s_id.startswith("95") == False:
-		flash("ID must begin with 95.")
-		error = True
+	if not s_id:
+		flash("No ID given.")
 
-	if len(s_id) != 9:
-		flash("ID must be 9 digits.")
-		error = True
+	else:
+		if s_id.startswith("95") == False:
+			flash("ID must begin with 95.")
+			error = True
+
+		if len(s_id) != 9:
+			flash("ID must be 9 digits.")
+			error = True
 
 	if not email:
 		flash("No email given.")
