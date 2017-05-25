@@ -53,6 +53,10 @@ app.secret_key = str(uuid.uuid4())
 @app.route("/index")
 def index():
 	app.logger.debug("Main page entry")
+
+	#Clears any saved user data upon returning to the splash page.
+	clear_session()
+	
 	return render_template('splash.html')
 
 @app.route("/signup")
@@ -128,44 +132,6 @@ def humanize_arrow_date(date):
 		human = date
 	return human
 
-@app.route("/_avail", methods=["POST"])
-def init_avail():
-	"""
-	Updates new accounts with account availability and experience
-	"""
-	
-	first = flask.session['first']
-	last = flask.session['last']
-	s_id = flask.session['id']
-	email = flask.session['email']
-	pwd = flask.session['pwd']
-	
-	#Clears flask variables
-	flask.session['first'] = None
-	flask.session['last'] = None
-	flask.session['id'] = None
-	flask.session['email'] = None
-	flask.session['pwd'] = None
-
-	#TODO: Pull data from table
-	mon_avail = request.form.get('mo', '', type=str)
-	tue_avail = request.form.get('tu', '', type=str)
-	wed_avail = request.form.get('we', '', type=str)
-	thu_avail = request.form.get('th', '', type=str)
-	fri_avail = request.form.get('fr', '', type=str)
-
-	print(first)
-	print(last)
-	print(s_id)
-	print(email)
-	print(mon_avail)
-	print(tue_avail)
-	print(wed_avail)
-	print(thu_avail)
-	print(fri_avail)
-	
-	return redirect("/avail")
-
 @app.route("/_signup", methods=["POST"])
 def create_account():
 	"""
@@ -185,29 +151,50 @@ def create_account():
 	last.strip()
 	s_id.strip()
 	email.strip()
-	
+
 	print("Testing account information...")
 	if signup_errors(first, last, s_id, email, pwd, confirm) == True:
-		flask.session['first'] = None
-		flask.session['last'] = None
-		flask.session['id'] = None
-		flask.session['email'] = None
-		
-		if first:
-			flask.session['first'] = first
-		if last:
-			flask.session['last'] = last
-		if s_id:
-			flask.session['id'] = s_id
-		if email:
-			flask.session['email'] = email
-		
 		return redirect("/signup")
-
-	print("Encrypting password")
+	
+	print("Encrypting password...")
 	pwd = base64.b64encode(pwd.encode('utf-8'))
 	flask.session['pwd'] = pwd
 
+	return redirect("/avail")
+
+@app.route("/_avail", methods=["POST"])
+def init_avail():
+	"""
+	Updates new accounts with initial account availability and experience
+	"""
+	
+	first = flask.session['first']
+	last = flask.session['last']
+	s_id = flask.session['id']
+	email = flask.session['email']
+	pwd = flask.session['pwd']
+	
+	#Clears flask variables
+	#clear_session()
+
+	#TODO: Pull data from table
+	mon_avail = request.form.get('mo', '', type=str)
+	tue_avail = request.form.get('tu', '', type=str)
+	wed_avail = request.form.get('we', '', type=str)
+	thu_avail = request.form.get('th', '', type=str)
+	fri_avail = request.form.get('fr', '', type=str)
+
+	print(first)
+	print(last)
+	print(s_id)
+	print(email)
+	print(pwd)
+	print(mon_avail)
+	print(tue_avail)
+	print(wed_avail)
+	print(thu_avail)
+	print(fri_avail)
+	
 	return redirect("/avail")
 
 @app.route("/_delete")
@@ -245,9 +232,6 @@ def login_user():
 
 	if input_pwd == pwd:
 		flask.session['user'] =  str(account['_id'])
-		
-		if account["avail"] == "":
-			return redirect("/avail")
 		
 		return redirect("/dashboard")
 	else:
@@ -362,29 +346,44 @@ def insert_new(first, last, s_id, email, pwd, confirm):
 	
 	return "Success"
 
+def clear_session():
+	"""
+	Calling this function will clear all of the session variables
+	"""
+
+	flask.session['first'] = None
+	flask.session['last'] = None
+	flask.session['id'] = None
+	flask.session['email'] = None
+	flask.session['pwd'] = None
+
+	return
+
+
 def signup_errors(first, last, s_id, email, pwd, confirm):
 	"""
 	Tests the signup information given for input errors
 	"""
 	error = False
-	flask.session['last'] = last
-	flask.session['id'] = s_id
-	flask.session['email'] = email
 	
+	#First Name Input Error Handling
 	if not first:
 		flash("No first name given.")
 		error = True
 	else:
 		flask.session['first'] = first
 	
+	#Last Name Input Error Handling
 	if not last:
 		flash("No last name given.")
 		error = True
 	else:
-		flask.session['last'] = first
+		flask.session['last'] = last
 
+	#Student ID Input Error Handling
 	if not s_id:
 		flash("No ID given.")
+		error = True
 
 	else:
 		if s_id.startswith("95") == False:
@@ -395,10 +394,17 @@ def signup_errors(first, last, s_id, email, pwd, confirm):
 			flash("ID must be 9 digits.")
 			error = True
 
+		else:
+			flask.session['id'] = s_id
+
+	#E-mail Input Error Handling
 	if not email:
 		flash("No email given.")
 		error = True
+	else:
+		flask.session['email'] = email
 
+	#Password Input Error Handling
 	if not pwd:
 		flash("No password given.")
 		error = True
