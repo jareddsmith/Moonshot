@@ -19,12 +19,12 @@ brew flask
 brew pymongo
 ```
 
-Install the virtual environment and run program:
+Install the necessary modules into the virtual environment:
 ```
 make install
 ```
 
-Install the necessary modules into the virtual environment:
+Install the virtual environment and run program:
 ```
 make run
 ```
