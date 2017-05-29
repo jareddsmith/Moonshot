@@ -68,6 +68,11 @@ def signup():
 def avail():
 	app.logger.debug("Availability page entry")
 	return render_template('avail.html')
+
+@app.route("/exp")
+def exp():
+	app.logger.debug("Experience page entry")
+	return render_template('exp.html')
 	
 @app.route("/login")
 def login():
@@ -167,28 +172,38 @@ def init_avail():
 	"""
 	Updates new accounts with initial account availability and experience
 	"""
+	#Pulls data from table
+	moAvail = request.form.getlist('mo')
+	tuAvail = request.form.getlist('tu')
+	weAvail = request.form.getlist('we')
+	thAvail = request.form.getlist('th')
+	frAvail = request.form.getlist('fr')
+
+	workAvail = {'Monday': moAvail, 'Tuesday': tuAvail, 'Wednesday': weAvail, 'Thursday': thAvail, 'Friday': frAvail}
+	
+	flask.session['avail'] = workAvail
+	
+	return redirect("/exp")
+
+@app.route("/_exp", methods=["POST"])
+def init_exp():
+	"""
+	Updates new accounts with initial account availability and experience
+	"""
 	
 	first = flask.session['first']
 	last = flask.session['last']
 	s_id = flask.session['id']
 	email = flask.session['email']
 	pwd = flask.session['pwd']
+	avail = flask.session['avail']
 	
-	#Clears flask variables
+	#Clear Session Variables
 	clear_session()
-
-	#Pulls data from table
-	workAvail = { "Mon": get_avail("mo"), "Tue": get_avail("tu"), "Wed": get_avail("we"), "Thu": get_avail("th"), "Fri": get_avail("fr")}
-
-	#TODO: Create account
-	print(first)
-	print(last)
-	print(s_id)
-	print(email)
-	print(pwd)
-	print(workAvail)
 	
-	return redirect("/avail")
+	#Pull data from form
+	
+	return redirect("/exp")
 
 @app.route("/_delete")
 def delete_account():
@@ -301,23 +316,6 @@ def get_accounts():
 	accounts.sort(key=lambda a: a["date"])
 	return accounts
 
-def get_avail(day):
-	"""
-	Returns checked data of a specific day in the availability table
-	"""
-	
-	avail = []
-	timeslots = ["8","830","9","930","10","1030","11","1130","12","1230","13","1330","14","1430","15","1530","16","1630"]
-	
-	for timeslot in timeslots:
-		requestName = "{}{}".format(day, timeslot)
-			
-		data = request.form.get(requestName, '', type=str)
-		if data:
-			avail.append(data)
-	
-	return avail
-
 def insert_new(first, last, s_id, email, pwd, confirm):
 	"""
 	Inserts an new account into the database with minimum user info
@@ -366,6 +364,7 @@ def clear_session():
 	flask.session['id'] = None
 	flask.session['email'] = None
 	flask.session['pwd'] = None
+	flask.session['avail'] = None
 
 	return
 
