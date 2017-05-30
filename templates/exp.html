@@ -1,68 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
+<head>
 		
-	<!-- Basic Page Needs
-	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<meta charset="utf-8">
-	<title>Experience</title>
-	<meta name="description" content="Experience Page">
-    <meta name="author" content="Jared Smith">
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Sign Up: Experience</title>
+  <meta name="description" content="Experience Page">
+  <meta name="author" content="Jared Smith">
 		
-	<!-- Mobile Specific Metas
-	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 			
-	<!-- FONT
-	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 				
-	<!-- CSS
-	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <link rel="stylesheet" href="static/css/normalize.css">
-	<link rel="stylesheet" href="static/css/skeleton.css">
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="static/css/normalize.css">
+  <link rel="stylesheet" href="static/css/skeleton.css">
 			
-	<!-- Favicon
-	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<link rel="icon" type="image/png" href="images/favicon.png">
-	</head>
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+	  
+</head>
+<body>
 	
-	<body>
-		<!-- Flashed messages before content -->
-		{% with messages = get_flashed_messages() %}
-		{% if messages %}
-		<ul class="flashesList">
-			{% for message in messages %}
-			<li class=flashes>{{ message }}</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
-		{% endwith %}
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="expBackground">
+	  <div class="container">
+		  <!-- Flashed messages before content -->
+		  {% with messages = get_flashed_messages() %}
+		  {% if messages %}
+		  <ul class="flashesList">
+			  {% for message in messages %}
+				  <li class=flashes>{{ message }}</li>
+			  {% endfor %}
+		  </ul>
+		  {% endif %}
+		  {% endwith %}
+				
+		  <div class="row">
+			  <div class="column" style="margin-top: 5%">
+				  <h3>Please enter your relevant experience.</h3>
+				  <hr>
+				  <form method="POST" action="_avail" style="margin: 5% 5% auto 5%; overflow:auto">
+							
+					  <input type="button" id="half-left" onclick="document.location='/avail'" value="Back"/>
+					  <input class="button-primary" id="half-right" type="submit" value="Sign Up">
+				  </form>
+			  </div>
+		  </div>
+	  </div>
+  </div>
+  <!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 		
-		<!-- Primary Page Layout
-		 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-		<div class ="expBackground">
-			
-			<!-- Flashed messages before content -->
-			{% with messages = get_flashed_messages() %}
-			{% if messages %}
-			<ul class="flashesList">
-				{% for message in messages %}
-				<li class=flashes>{{ message }}</li>
-				{% endfor %}
-			</ul>
-			{% endif %}
-			{% endwith %}
-			
-			<div class="container">
-				<div class="row">
-					<div class="column" style="margin-top: 15%">
-						
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Document
-		 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	</body>
+</body>
 </html>
+

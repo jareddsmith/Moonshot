@@ -29,40 +29,41 @@
 </head>
 <body>
 
-<!-- Flashed messages before content -->
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class="flashesList">
-    {% for message in messages %}
-      <li class=flashes>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class ="loginBackground">
-  <div class="container">
-      <div class="row">
-          <div class="five column" style="margin-top: 20%">
-              <h3>Login</h3>
-              <hr>
-                <form action="_login" method="POST" style="margin: 5% 5% auto 5%;">
-                    <label for="LoginEmailInput" id="form_label">Your e-mail</label>
-                    <input class="u-full-width" type="email" placeholder="duckid@uoregon.edu" id="LoginEmailInput" name="LoginEmailInput">
-                
-                    <label for="LoginPasswordInput" id="form_label">Your password</label>
-                    <input class="u-full-width" type="password" placeholder="password" id="LoginPasswordInput" name="LoginPasswordInput">
+  <div class="loginBackground">
+	  <div class="container">
+		  <!-- Flashed messages before content -->
+		  {% with messages = get_flashed_messages() %}
+		  {% if messages %}
+		  <ul class="flashesList">
+			  {% for message in messages %}
+			  <li class=flashes>{{ message }}</li>
+			  {% endfor %}
+		  </ul>
+		  {% endif %}
+		  {% endwith %}
+		  
+		  <div class="row">
+			  <div class="five column" style="margin-top: 20%">
+				  <h3>Login</h3>
+				  <hr>
+				  <form action="_login" method="POST" style="margin: 5% 5% auto 5%;">
+					  <label for="LoginEmailInput" id="form_label">Your e-mail</label>
+					  <input class="u-full-width" type="email" placeholder="duckid@uoregon.edu" id="LoginEmailInput" name="LoginEmailInput">
+						  
+					  <label for="LoginPasswordInput" id="form_label">Your password</label>
+					  <input class="u-full-width" type="password" placeholder="password" id="LoginPasswordInput" name="LoginPasswordInput">
                         
-                    <input type="button" style="margin-top: 0%" id="half-left" onclick="document.location='/'" value="Back"/>
-                    <button class="button-primary" style="margin-top: 0%" id="half-right">Login</button>
-                </form>
-          </div>
-      </div>
+					  <input type="button" style="margin-top: 0%" id="half-left" onclick="document.location='/'" value="Back"/>
+					  <button class="button-primary" style="margin-top: 0%" id="half-right">Login</button>
+				  </form>
+			  </div>
+		  </div>
+	  </div>
   </div>
-  </div>
-<!-- End Document
+  
+  <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 </html>
