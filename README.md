@@ -7,16 +7,9 @@ Team Builder by the Moonshot student development team for CIS 422: Software Engi
 * Yuan Wang
 
 ## Setup
-Install Homebrew (if needed):
-```
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
 Install the necessary modules (if needed):
 ```
-brew arrow
-brew flask
-brew pymongo
+pip install -r requirements.txt
 ```
 
 Install the necessary modules into the virtual environment:
