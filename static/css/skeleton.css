@@ -81,7 +81,7 @@
 
   .one-half.column                { width: 48%; }
 
-  .signup.column                  { width: 47.5%; }
+  .signup.column                  { width: 47.5%; height: 100% }
   
   /* Alignment */
   .center.column,
@@ -211,6 +211,8 @@ h1, h2, h3, h4, h5, h6, h7 {
 }
 
 p {
+  font-size: 1.1rem;
+  font-weight: 300;
   margin-top: 0;
 }
 
@@ -386,7 +388,8 @@ fieldset {
   border-width: 0; }
 input[type="checkbox"],
 input[type="radio"] {
-  display: inline; }
+  display: inline;
+}
 label > .label-body {
   display: inline-block;
   margin-left: .5rem;
@@ -439,15 +442,15 @@ th {
     border: 1px solid #E1E1E1;
     padding: 0px 3px;
 }
+
 td {
   color: #FFF;
-  padding: 0px 5px;
   text-align: center;
   border-right: 1px solid #E1E1E1;
   border-bottom: 1px solid #E1E1E1;
 }
 th:first-child,
-td:first-child { border-bottom: 1px solid #E1E1E1; }
+td:first-child { border: 1px solid #E1E1E1; }
 th:last-child,
 td:last-child { border-right: 1px solid #E1E1E1; }
 
@@ -490,14 +493,39 @@ table#pm th {
 }
 
 table#lang {
-	float: right;
+	float: left;
+	height: 100%;
 	width: 100%;
-	margin-left: 1.5rem;
 	margin-bottom: 1.5rem;
 }
 
 table#lang th {
+	border: 1px solid #E1E1E1;
 	background-color: #00483C;
+}
+table#lang th:first-child {
+	padding: 0;
+	width: 50%
+}
+table#lang th:last-child {
+	padding: 0;
+	width: 50%
+}
+
+table#lang td {
+	border: 1px solid #E1E1E1;
+	padding: 6px;
+}
+
+table#major {
+	float: right;
+	height: 100%;
+	width: 100%;
+	margin-bottom: 1.5rem;
+}
+
+table#major th{
+	background-color: #00483C
 }
 
 
@@ -518,11 +546,14 @@ table,
 p,
 ul,
 ol,
+select,
 form {
   margin-bottom: 0rem; }
-select {
-	margin: 0rem;
+input[type="checkbox"],
+input[type="radio"] {
+	margin: 25% 0;
 }
+
 
 
 /* Utilities
@@ -670,11 +701,9 @@ html, body{height:100%;}
 .signupBackground label {
 	color: white;
 }
-.signupBackground input[type="checkbox"] {
-    margin: 0;
-}
-.signupBackground td {
-    align: center;
+
+.expBackground label {
+	color: white;
 }
 
 .splashBackground p, .splashBackground h4, .splashBackground h5, .splashBackground h6 {

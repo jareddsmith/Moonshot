@@ -52,7 +52,8 @@
 					  <div class="signup column">
 						  <table id="lang">
 							  <tr>
-								  <th>Language</th> <th>Proficiency<br><h5>5 - Best</h5></th>
+								  <th>Language</th><th>Proficiency<br>
+										           <p>5 - Best</p></th>
 							  </tr>
 							  <tr>
 								  <th>Java</th>
@@ -94,9 +95,22 @@
 								  </td>
 							  </tr>
 							  <tr>
-								  <th>HTML/PHP</th>
+								  <th>Swift</th>
 								  <td>
-									  <select class="u-full-width" name="html">
+									  <select class="u-full-width" name="swift">
+										  <option value="">None</option>
+										  <option value="1">1</option>
+										  <option value="2">2</option>
+										  <option value="3">3</option>
+										  <option value="4">4</option>
+										  <option value="5">5</option>
+									  </select>
+								  </td>
+							  </tr>
+							  <tr>
+								  <th>PHP</th>
+								  <td>
+									  <select class="u-full-width" name="php">
 										  <option value="">None</option>
 										  <option value="1">1</option>
 										  <option value="2">2</option>
@@ -119,12 +133,84 @@
 									  </select>
 								  </td>
 							  </tr>
+							  <tr>
+								  <th>Other<br><p>*Specify</p></th>
+								  <td>
+									  <input class="u-full-width" type="text" placeholder="Other" name="other">
+									  <select class="u-full-width" name="javascript">
+										  <option value="">None</option>
+										  <option value="1">1</option>
+										  <option value="2">2</option>
+										  <option value="3">3</option>
+										  <option value="4">4</option>
+										  <option value="5">5</option>
+									  </select>
+								  </td>
+							  </tr>
+
 						  </table>
 					  </div>
 					  <div class="signup column">
-						  <input type="button" id="half-left" onclick="document.location='/avail'" value="Back"/>
-						  <input class="button-primary" id="half-right" type="submit" value="Sign Up">
+						  <table id="major">
+							  <tr>
+								  <th style="background-color:transparent;border:none"></th>
+								  <th>Weak</th><th>N/A</th><th>Strong</th>
+							  </tr>
+							  <tr>
+								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis313">CIS 313:</a>
+									  <br><p>Data Structures</p></th>
+								  <td><input type="radio" name="313" value="weak"></td>
+								  <td><input type="radio" name="313" value=""></td>
+								  <td><input type="radio" name="313" value="str"></td>
+							  </tr>
+							  <tr>
+								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis314">CIS 314:</a>
+									  <br><p>Computer Org.</p></th>
+								  <td><input type="radio" name="314" value="weak"></td>
+								  <td><input type="radio" name="314" value=""></td>
+								  <td><input type="radio" name="314" value="str"></td>
+							  </tr>
+							  <tr>
+								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis315">CIS 315:</a>
+									  <br><p>Algorithms</p></th>
+								  <td><input type="radio" name="315" value="weak"></td>
+								  <td><input type="radio" name="315" value=""></td>
+								  <td><input type="radio" name="315" value="str"></td>
+							  </tr>
+							  <tr>
+								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis322">CIS 322:</a>
+									  <br><p>Software Eng.</p></th>
+								  <td><input type="radio" name="322" value="weak"></td>
+								  <td><input type="radio" name="322" value=""></td>
+								  <td><input type="radio" name="322" value="str"></td>
+							  </tr>
+							  <tr>
+								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis330">CIS 330:</a>
+									  <br><p>C/C++ and Unix</p></th>
+								  <td><input type="radio" name="330" value="weak"></td>
+								  <td><input type="radio" name="330" value=""></td>
+								  <td><input type="radio" name="330" value="str"></td>
+							  </tr>
+							  <tr>
+								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis415">CIS 415:</a>
+									  <br><p>Operating Systems</p></th>
+								  <td><input type="radio" name="415" value="weak"></td>
+								  <td><input type="radio" name="415" value=""></td>
+								  <td><input type="radio" name="415" value="str"></td>
+							  </tr>
+							  <tr>
+								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis425">CIS 425:</a>
+									  <br><p>Prog. Languages</p></th>
+								  <td><input type="radio" name="425" value="weak"></td>
+								  <td><input type="radio" name="425" value=""></td>
+								  <td><input type="radio" name="425" value="str"></td>
+							  </tr>
+						  </table>
 					  </div>
+					  <label for="TeamPrefInput">Teammate Preference:</label><input class="u-full-width" type="text" placeholder="i.e. Jane Doe, John Smith" id="TeamPrefInput" name="TeamPrefInput">
+						  
+					  <input type="button" id="half-left" onclick="document.location='/avail'" value="Back"/>
+					  <input class="button-primary" id="half-right" type="submit" value="Sign Up">
 				  </form>
 			  </div>
 		  </div>
