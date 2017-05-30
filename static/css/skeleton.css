@@ -211,7 +211,12 @@ h1, h2, h3, h4, h5, h6, h7 {
 }
 
 p {
-  margin-top: 0; }
+  margin-top: 0;
+}
+
+select {
+	color: #333;
+}
 
 
 /* Links
@@ -343,6 +348,7 @@ select {
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box; }
+
 /* Removes awkward default styles on some inputs for iOS */
 input[type="email"],
 input[type="number"],
@@ -483,6 +489,17 @@ table#pm th {
     background-color: #00483C;
 }
 
+table#lang {
+	float: right;
+	width: 100%;
+	margin-left: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+table#lang th {
+	background-color: #00483C;
+}
+
 
 /* Spacing
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -491,7 +508,6 @@ button,
   margin-bottom: 0rem; }
 input,
 textarea,
-select,
 fieldset {
   margin-bottom: 1.5rem; }
 pre,
@@ -504,6 +520,9 @@ ul,
 ol,
 form {
   margin-bottom: 0rem; }
+select {
+	margin: 0rem;
+}
 
 
 /* Utilities
