@@ -48,13 +48,15 @@
 			  <div class="column" style="margin-top: 5%">
 				  <h3>Please enter your relevant experience.</h3>
 				  <hr>
-				  <form method="POST" action="_avail" style="margin: 5% 5% auto 5%; overflow:auto">
+				  <form method="POST" action="_exp" style="margin: 5% 5% auto 5%; overflow:auto">
 					  <div class="signup column">
-						  <table id="lang">
-							  <tr>
-								  <th>Language</th><th>Proficiency<br>
-										           <p>5 - Best</p></th>
-							  </tr>
+						  <table id="lang" class="u-full-width">
+							  <thead>
+								  <tr>
+									  <th>Language</th><th>Proficiency
+														<p>5 - Best</p></th>
+								  </tr>
+							  </thead>
 							  <tr>
 								  <th>Java</th>
 								  <td>
@@ -134,10 +136,10 @@
 								  </td>
 							  </tr>
 							  <tr>
-								  <th>Other<br><p>*Specify</p></th>
+								  <th>Other<p>(Specify)</p></th>
 								  <td>
-									  <input class="u-full-width" type="text" placeholder="Other" name="other">
-									  <select class="u-full-width" name="javascript">
+									  <input class="u-full-width" type="text" placeholder="Other" name="specified">
+									  <select class="u-full-width" name="other">
 										  <option value="">None</option>
 										  <option value="1">1</option>
 										  <option value="2">2</option>
@@ -151,66 +153,72 @@
 						  </table>
 					  </div>
 					  <div class="signup column">
-						  <table id="major">
+						  <table id="major" class="u-full-width">
+							  <thead>
+								  <tr>
+									  <th style="background-color:transparent;border:none;
+										  height: 42px;width:62.5%">
+									  </th>
+									  <th style="width:12.5%">Weak</th>
+									  <th style="width:12.5%">N/A</th>
+									  <th style="width:12.5%">Strong</th>
+								  </tr>
+							  </thead>
 							  <tr>
-								  <th style="background-color:transparent;border:none"></th>
-								  <th>Weak</th><th>N/A</th><th>Strong</th>
-							  </tr>
-							  <tr>
-								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis313">CIS 313:</a>
-									  <br><p>Data Structures</p></th>
+								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis313">CIS 313:</a><p>Data Structures</p></th>
 								  <td><input type="radio" name="313" value="weak"></td>
-								  <td><input type="radio" name="313" value=""></td>
+								  <td><input type="radio" name="313" value="" checked></td>
 								  <td><input type="radio" name="313" value="str"></td>
 							  </tr>
 							  <tr>
 								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis314">CIS 314:</a>
-									  <br><p>Computer Org.</p></th>
+									  <p>Computer Org.</p></th>
 								  <td><input type="radio" name="314" value="weak"></td>
-								  <td><input type="radio" name="314" value=""></td>
+								  <td><input type="radio" name="314" value="" checked></td>
 								  <td><input type="radio" name="314" value="str"></td>
 							  </tr>
 							  <tr>
 								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis315">CIS 315:</a>
-									  <br><p>Algorithms</p></th>
+									  <p>Algorithms</p></th>
 								  <td><input type="radio" name="315" value="weak"></td>
-								  <td><input type="radio" name="315" value=""></td>
+								  <td><input type="radio" name="315" value="" checked></td>
 								  <td><input type="radio" name="315" value="str"></td>
 							  </tr>
 							  <tr>
 								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis322">CIS 322:</a>
-									  <br><p>Software Eng.</p></th>
+									  <p>Software Eng.</p></th>
 								  <td><input type="radio" name="322" value="weak"></td>
-								  <td><input type="radio" name="322" value=""></td>
+								  <td><input type="radio" name="322" value="" checked></td>
 								  <td><input type="radio" name="322" value="str"></td>
 							  </tr>
 							  <tr>
 								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis330">CIS 330:</a>
-									  <br><p>C/C++ and Unix</p></th>
+									  <p>C/C++ and Unix</p></th>
 								  <td><input type="radio" name="330" value="weak"></td>
-								  <td><input type="radio" name="330" value=""></td>
+								  <td><input type="radio" name="330" value="" checked></td>
 								  <td><input type="radio" name="330" value="str"></td>
 							  </tr>
 							  <tr>
 								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis415">CIS 415:</a>
-									  <br><p>Operating Systems</p></th>
+									  <p>Operating Systems</p></th>
 								  <td><input type="radio" name="415" value="weak"></td>
-								  <td><input type="radio" name="415" value=""></td>
+								  <td><input type="radio" name="415" value="" checked></td>
 								  <td><input type="radio" name="415" value="str"></td>
 							  </tr>
 							  <tr>
 								  <th><a href="http://classes.cs.uoregon.edu/index.php?course=cis425">CIS 425:</a>
-									  <br><p>Prog. Languages</p></th>
+									  <p>Prog. Languages</p></th>
 								  <td><input type="radio" name="425" value="weak"></td>
-								  <td><input type="radio" name="425" value=""></td>
+								  <td><input type="radio" name="425" value="" checked></td>
 								  <td><input type="radio" name="425" value="str"></td>
 							  </tr>
 						  </table>
+						  <br>
+						  <label for="TeamPrefInput">Teammate Preference:</label><input class="u-full-width" type="text" placeholder="i.e. Jane Doe, John Smith" id="TeamPrefInput" name="TeamPrefInput">
+							  
+						  <input type="button" id="half-left" onclick="document.location='/avail'" value="Back"/>
+						  <input class="button-primary" id="half-right" type="submit" value="Sign Up">
 					  </div>
-					  <label for="TeamPrefInput">Teammate Preference:</label><input class="u-full-width" type="text" placeholder="i.e. Jane Doe, John Smith" id="TeamPrefInput" name="TeamPrefInput">
-						  
-					  <input type="button" id="half-left" onclick="document.location='/avail'" value="Back"/>
-					  <input class="button-primary" id="half-right" type="submit" value="Sign Up">
 				  </form>
 			  </div>
 		  </div>

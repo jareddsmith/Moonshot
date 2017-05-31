@@ -494,22 +494,14 @@ table#pm th {
 
 table#lang {
 	float: left;
-	height: 100%;
-	width: 100%;
 	margin-bottom: 1.5rem;
 }
 
 table#lang th {
-	border: 1px solid #E1E1E1;
+	padding: 0;
+	height: 4.2rem;
+	width: 50%;
 	background-color: #00483C;
-}
-table#lang th:first-child {
-	padding: 0;
-	width: 50%
-}
-table#lang th:last-child {
-	padding: 0;
-	width: 50%
 }
 
 table#lang td {
@@ -519,13 +511,11 @@ table#lang td {
 
 table#major {
 	float: right;
-	height: 100%;
-	width: 100%;
-	margin-bottom: 1.5rem;
+	margin-bottom: 3.333rem;
 }
 
 table#major th{
-	background-color: #00483C
+	background-color: #00483C;
 }
 
 
@@ -704,6 +694,7 @@ html, body{height:100%;}
 
 .expBackground label {
 	color: white;
+	float: right;
 }
 
 .splashBackground p, .splashBackground h4, .splashBackground h5, .splashBackground h6 {

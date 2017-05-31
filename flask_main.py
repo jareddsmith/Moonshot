@@ -86,11 +86,13 @@ def landing():
 	
 	accountID = flask.session['user']
 	account =  collection.find_one({"_id": ObjectId(accountID)})
-	flask.session['first'] = account['first']
-	flask.session['last'] = account['last']
-	flask.session['email'] = account['email']
+	login = account['login']
+	
+	flask.session['first'] = login['first']
+	flask.session['last'] = login['last']
+	flask.session['email'] = login['email']
 	flask.session['avail'] = account['avail']
-	flask.session['accounts'] = get_accounts()
+	#flask.session['accounts'] = get_accounts()
 	
 	return render_template('main.html')
 	
@@ -143,6 +145,9 @@ def create_account():
 	Creates and inserts a new account into the database
 	"""
 	
+	#Clear session variables on action
+	clear_session()
+	
 	print("Getting account information...")
 	first = request.form.get('RegisterFirstNameInput', '', type=str)
 	last = request.form.get('RegisterLastNameInput', '', type=str)
@@ -161,9 +166,20 @@ def create_account():
 	if signup_errors(first, last, s_id, email, pwd, confirm) == True:
 		return redirect("/signup")
 	
+	if collection.find_one({"email": email}) is not None:
+		flash("Account already created!")
+		return redirect("/login")
+
 	print("Encrypting password...")
 	pwd = base64.b64encode(pwd.encode('utf-8'))
 	flask.session['pwd'] = pwd
+
+	flask.session['login'] = {'first': flask.session['first'], 'last': flask.session['last']
+							, 'id': flask.session['id'], 'email': flask.session['email']
+							, 'pwd': flask.session['pwd']}
+
+	#Clear session variables from preloading
+	clear_session()
 
 	return redirect("/avail")
 
@@ -191,19 +207,104 @@ def init_exp():
 	Updates new accounts with initial account availability and experience
 	"""
 	
-	first = flask.session['first']
-	last = flask.session['last']
-	s_id = flask.session['id']
-	email = flask.session['email']
-	pwd = flask.session['pwd']
+	login = flask.session['login']
 	avail = flask.session['avail']
 	
-	#Clear Session Variables
-	clear_session()
+	#Pull data from language data and appends the valid info into a tuple list
+	#i.e. (Language, Score)
+	langData = []
 	
-	#Pull data from form
+	if request.form.get('java'):
+		langData.append(('java', request.form.get('java')))
 	
-	return redirect("/exp")
+	if request.form.get('c'):
+		langData.append(('c', request.form.get('c')))
+
+	if request.form.get('python'):
+		langData.append(('python', request.form.get('python')))
+	
+	if request.form.get('swift'):
+		langData.append(('swift', request.form.get('swift')))
+	
+	if request.form.get('php'):
+		langData.append(('php', request.form.get('php')))
+
+	if request.form.get('javascript'):
+		langData.append(('javascript', request.form.get('javascript')))
+
+	if request.form.get('specified', '', type=str):
+		otherTuple =(request.form.get('specified', '', type=str), request.form.get('other'))
+		langData.append(otherTuple)
+				
+	#Pull data from course data and appends the valid info into a tuple list
+	#i.e. (Course, [weak/str])
+				
+	courseData = []
+				
+	if request.form.get('313'):
+		courseData.append(('313', request.form.get('313')))
+	
+	if request.form.get('314'):
+		courseData.append(('314', request.form.get('314')))
+
+	if request.form.get('315'):
+		courseData.append(('315', request.form.get('315')))
+	
+	if request.form.get('322'):
+		courseData.append(('322', request.form.get('322')))
+						
+	if request.form.get('330'):
+		courseData.append(('330', request.form.get('330')))
+						
+	if request.form.get('415'):
+		courseData.append(('415', request.form.get('415')))
+						
+	if request.form.get('425'):
+		courseData.append(('425', request.form.get('425')))
+
+	#Pull teammate preference
+	if request.form.get('TeamPrefInput', '', type=str):
+		exp = {'pro': langData, 'per': courseData, 'pref': request.form.get('TeamPrefInput', '', type=str)}
+
+	insert_new(login, avail, exp)
+
+	#Clear session variables before redirect
+	flask.session['login'] = None
+	flask.session['avail'] = None
+	flask.session['exp'] = None
+
+	return redirect("/login")
+
+@app.route("/_login", methods=["POST"])
+def login_user():
+	"""
+	Logs user in
+	"""
+	
+	input_email = request.form.get('LoginEmailInput')
+	input_pwd = request.form.get('LoginPasswordInput')
+	
+	#Strips any excess whitespace and then attempts to find a user
+	account = collection.find_one({"user": input_email.strip()})
+	if account is None:
+		flash("Account not found!")
+		return redirect("/login")
+
+	login = account["login"]
+	pwd = base64.b64decode(login["pwd"]).decode("utf-8")
+
+	if input_pwd == pwd:
+		#Sets the login session for the user
+		flask.session['user'] =  str(account['_id'])
+		
+		return redirect("/dashboard")
+	else:
+		flash("Invalid credentials.")
+
+	if not input_pwd:
+		flash("No password entered.")
+	
+	return redirect("/login")
 
 @app.route("/_delete")
 def delete_account():
@@ -221,34 +322,6 @@ def delete_account():
 	print("Deleted! Redirecting to **TBD**.")
 
 	return redirect("/**TBD**")
-	
-@app.route("/_login", methods=["POST"])
-def login_user():
-	"""
-	Logs user in
-	"""
-	input_email = request.form.get('LoginEmailInput')
-	input_pwd = request.form.get('LoginPasswordInput')
-	
-	account = collection.find_one({"email": input_email})
-	print(account)
-	if account is None:
-		flash("Account not found!")
-		return redirect("/login")
-	
-	pwd = base64.b64decode(account["pwd"]).decode("utf-8")
-
-	if input_pwd == pwd:
-		flask.session['user'] =  str(account['_id'])
-		
-		return redirect("/dashboard")
-	else:
-		flash("Invalid credentials.")
-
-	if not input_pwd:
-		flash("No password entered.")
-	
-	return redirect("/login")
 	
 @app.route("/_update", methods=["POST"])
 def update_user():
@@ -316,7 +389,7 @@ def get_accounts():
 	accounts.sort(key=lambda a: a["date"])
 	return accounts
 
-def insert_new(first, last, s_id, email, pwd, confirm):
+def insert_new(login, avail, exp):
 	"""
 	Inserts an new account into the database with minimum user info
 	"""
@@ -324,39 +397,25 @@ def insert_new(first, last, s_id, email, pwd, confirm):
 	dt = arrow.get(date, 'MM/DD/YYYY').replace(tzinfo='local')
 	iso_dt = dt.isoformat()
 	
-	#Input checking
-	account = collection.find_one({"email": email})
-	if account is not None:
-		flash("Account already created!")
-		return "registered"
-	else:
-		flash("Account created! You may now login.")
-	
 	print("Compiling new account from data")
 	account = {
 		"type" :  "account",
-			"role" : "user",
-			"date" : iso_dt,
-			"first"	: first,
-			"last" : last,
-			"s_id" : s_id,
-			"email" : email,
-			"pwd" : pwd,
-			"lang" : "",
-			"exp" : "",
-			"str" : "",
-			"wk" : "",
-			"avail" : ""
+			"role"	: "admin",
+			"user"	: login["email"],
+			"login" : login,
+			"avail" : avail,
+			"exp"	: exp
 	}
 
 	collection.insert(account)
 	print("Account has been inserted into the database.")
+	flash("Account created! You may now login.")
 	
-	return "Success"
+	return
 
 def clear_session():
 	"""
-	Calling this function will clear all of the session variables
+	Calling this function will clear all of the session variables used for login redirect
 	"""
 
 	flask.session['first'] = None
@@ -364,7 +423,6 @@ def clear_session():
 	flask.session['id'] = None
 	flask.session['email'] = None
 	flask.session['pwd'] = None
-	flask.session['avail'] = None
 
 	return
 
