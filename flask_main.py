@@ -92,7 +92,7 @@ def landing():
 	flask.session['last'] = login['last']
 	flask.session['email'] = login['email']
 	flask.session['avail'] = account['avail']
-	#flask.session['accounts'] = get_accounts()
+	flask.session['accounts'] = get_accounts()
 	
 	return render_template('main.html')
 	
@@ -265,8 +265,10 @@ def init_exp():
 	#Pull teammate preference
 	if request.form.get('TeamPrefInput', '', type=str):
 		exp = {'pro': langData, 'per': courseData, 'pref': request.form.get('TeamPrefInput', '', type=str)}
+	else:
+		exp = {'pro': langData, 'per': courseData, 'pref': ''}
 
-	insert_new(login, avail, exp)
+	insert_account(login, avail, exp)
 
 	#Clear session variables before redirect
 	flask.session['login'] = None
@@ -286,6 +288,7 @@ def login_user():
 	
 	#Strips any excess whitespace and then attempts to find a user
 	account = collection.find_one({"user": input_email.strip()})
+	print(account)
 	if account is None:
 		flash("Account not found!")
 		return redirect("/login")
@@ -306,22 +309,36 @@ def login_user():
 	
 	return redirect("/login")
 
-@app.route("/_delete")
-def delete_account():
+@app.route("/_manage")
+def manage_accounts():
 	"""
-	Deletes accounts by accountID
+	Manage accounts by accountID
 	"""
 
-	print("Getting account id...")
-	accountID = request.args.get('accountID', 0, type=str)
-	print("The account ID is " + accountID)
-	print("Deleting account...")
+	print("Getting selected account ids and action...")
+	selectedAccounts = request.form.getlist('selected')
+	actionToPerform = request.form.get('action')
+	
+	if actionToPerform == "delete":
+		print("Deleting accounts...")
+		for accountID in selectedAccounts:
+			account =  collection.find_one({"_id": ObjectId(accountID)})
+			collection.remove(account)
 
-	account =  collection.find_one({"_id": ObjectId(accountID)})
-	collection.remove(account)
-	print("Deleted! Redirecting to **TBD**.")
+	if actionToPerform == "generate":
+		print("Generating data to be sorted")
+		
+		groupSize = request.form.get('GroupSizeInput')
+		groupSizeRange = request.form.get('GroupSizeRangeInput')
+		
+		accountData = []
+		for accountID in selectedAccounts:
+			account =  collection.find_one({"_id": ObjectId(accountID)})
+			accountData.append(account)
 
-	return redirect("/**TBD**")
+
+
+	return redirect("/manage")
 	
 @app.route("/_update", methods=["POST"])
 def update_user():
@@ -389,7 +406,7 @@ def get_accounts():
 	accounts.sort(key=lambda a: a["date"])
 	return accounts
 
-def insert_new(login, avail, exp):
+def insert_account(login, avail, exp):
 	"""
 	Inserts an new account into the database with minimum user info
 	"""
@@ -400,6 +417,7 @@ def insert_new(login, avail, exp):
 	print("Compiling new account from data")
 	account = {
 		"type" :  "account",
+			"date"	: iso_dt,
 			"role"	: "admin",
 			"user"	: login["email"],
 			"login" : login,

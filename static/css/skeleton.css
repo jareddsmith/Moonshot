@@ -684,6 +684,18 @@ html, body{height:100%;}
 	height: 100%;
 }
 
+.manageBackground {
+	background: url(/static/manage.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-color: #333;
+	top:0;
+	bottom: 0;
+	height: 100%;
+}
+
 .loginBackground label {
 	color: white;
 }
@@ -814,6 +826,7 @@ html, body{height:100%;}
 .navbar .navbuttons .menuitems {
   list-style: none;
   float: right;
+  color: #333;
   margin-right: 20px;
   font-size: 12pt;
   font-family: sans-serif;
@@ -835,13 +848,13 @@ html, body{height:100%;}
 }
 .publicannouncement {
   background: rgb(255, 255, 255);
-  margin-left: 120px;
-  max-width: 1000px;
-  width: 1000px;
+  width: 100%;
   padding-top: 100px;
   
 }
 .publicannouncement p {
+  text-align: center;
+  font-size: 12pt;
   background-color: yellow;
 }
 
